@@ -1,5 +1,7 @@
 package org.lightfor.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,4 +25,25 @@ public class RegexUtils {
             return null;
         }
     }
+
+    public static Integer countMatch(String input, String regex){
+        Pattern pattern =  Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        Integer count = 0;
+        while(matcher.find()){
+            count ++;
+        }
+        return count;
+    }
+
+    public static List<String> returnAllMatch(String input, String regex){
+        Pattern pattern =  Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        List<String> result = new ArrayList<>();
+        while(matcher.find()){
+            result.add(matcher.group(1));
+        }
+        return result;
+    }
+
 }
