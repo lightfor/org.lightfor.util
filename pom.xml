@@ -14,6 +14,9 @@
         <slf4j-log4j12.version>1.7.21</slf4j-log4j12.version>
         <!-- core end !-->
 
+        <mysql-connector-java.version>5.1.39</mysql-connector-java.version>
+        <fastjson.version>1.2.16</fastjson.version>
+
         <!-- provided start -->
         <servlet-api.version>2.5</servlet-api.version>
         <jsp-api.version>2.1</jsp-api.version>
@@ -38,6 +41,22 @@
             <version>${slf4j-log4j12.version}</version>
         </dependency>
         <!-- core end !-->
+
+        <!--mysql driver-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
 
         <!-- provided start -->
         <!--servlet/jsp api start-->
