@@ -1,7 +1,5 @@
 package org.lightfor.utils;
 
-import java.util.StringTokenizer;
-
 /**
  * IP工具类
  * Created by Light on 2016/11/10.
