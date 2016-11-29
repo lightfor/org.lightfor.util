@@ -4,7 +4,9 @@ package org.lightfor.utils;
  * 断言Utils类
  * Created by Light on 2016/1/29.
  */
-public class AssertUtils {
+public enum  AssertUtils {
+    INSTANCE;
+
     /**
      * 断言表达式为true
      * @param expression 表达式

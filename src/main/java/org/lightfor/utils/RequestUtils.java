@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
  * Request工具类
  * Created by Light on 2016/6/8.
  */
-public class RequestUtils {
+public enum  RequestUtils {
+    INSTANCE;
+
     /**
      * 获取客户端真实IP地址
      *

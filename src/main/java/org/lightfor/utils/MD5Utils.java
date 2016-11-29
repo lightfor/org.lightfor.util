@@ -10,7 +10,8 @@ import java.security.MessageDigest;
  * MD5 relative Class
  * Created by Light on 2016/1/29.
  */
-public class MD5Utils {
+public enum  MD5Utils {
+    INSTANCE;
 
     private static char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     private static MessageDigest messageDigest = null;

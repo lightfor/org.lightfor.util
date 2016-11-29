@@ -9,7 +9,9 @@ import java.lang.reflect.Method;
  * bean工具类
  * Created by Light on 2016/7/21.
  */
-public class BeanUtils {
+public enum  BeanUtils {
+    INSTANCE;
+
     public static Method getWriteMethod(Object beanObj, String name){
         Method method = null;
         try {

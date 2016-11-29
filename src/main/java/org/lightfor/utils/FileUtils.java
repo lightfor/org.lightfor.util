@@ -12,7 +12,8 @@ import java.nio.file.Paths;
  * 文件工具类
  * Created by Light on 2016/8/11.
  */
-public class FileUtils {
+public enum  FileUtils {
+    INSTANCE;
 
     public static String fileToStringJDK6elow(String filePath){
         try {

@@ -4,7 +4,9 @@ package org.lightfor.utils;
  * IP工具类
  * Created by Light on 2016/11/10.
  */
-public class IpUtils {
+public enum  IpUtils {
+    INSTANCE;
+
     public static long ipToLong(String ip){
         long result = 0;
         String[] ipArr = ip.split("\\.");

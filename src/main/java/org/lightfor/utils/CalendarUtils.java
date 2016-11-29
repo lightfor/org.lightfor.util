@@ -6,7 +6,9 @@ import java.util.Calendar;
  * 日期工具类
  * Created by Light on 2016/6/7.
  */
-public class CalendarUtils {
+public enum  CalendarUtils {
+    INSTANCE;
+
     /**
      * @param calendar Calendar实例
      * @return 返回一周之中的星期几，星期一返回1，星期天返回7

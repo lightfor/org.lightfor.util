@@ -9,7 +9,9 @@ import java.util.regex.Pattern;
  * 正则表达式工具类
  * Created by Light on 2016/8/9.
  */
-public class RegexUtils {
+public enum RegexUtils {
+
+    INSTANCE;
 
     /**
      * @param input 输入串

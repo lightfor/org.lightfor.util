@@ -14,7 +14,9 @@ import java.util.List;
  * XML工具类
  * Created by Light on 2016/1/29.
  */
-public class XMLUtils {
+public enum  XMLUtils {
+    INSTANCE;
+
     /**
      * DocumentBuilderFactory实例
      */

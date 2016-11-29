@@ -23,7 +23,8 @@ import java.util.Map;
  * POI工具类
  * Created by Light on 2016/6/21.
  */
-public class POIUtils {
+public enum  POIUtils {
+    INSTANCE;
 
     private static final Logger logger = LoggerFactory.getLogger(POIUtils.class);
 

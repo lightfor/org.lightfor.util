@@ -4,7 +4,9 @@ package org.lightfor.utils;
  * 数组Utils类
  * Created by Light on 2016/1/29.
  */
-public class ArrayUtils {
+public enum  ArrayUtils {
+    INSTANCE;
+
     public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
     public static final Class[] EMPTY_CLASS_ARRAY = new Class[0];
     public static final String[] EMPTY_STRING_ARRAY = new String[0];

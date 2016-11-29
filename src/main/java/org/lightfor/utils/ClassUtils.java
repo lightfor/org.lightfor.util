@@ -7,7 +7,9 @@ import java.math.BigInteger;
  * 类工具类
  * Created by Light on 2016/1/29.
  */
-public class ClassUtils {
+public enum  ClassUtils {
+    INSTANCE;
+
     /**
      * 查询结果总记录数的类型转换
      * @param count 总记录数（Object类型）

@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
  * 代码生成Utils
  * Created by Light on 2016/8/9.
  */
-public class GenCodeUtils {
+public enum  GenCodeUtils {
+    INSTANCE;
 
     private static final int TYPE_VARCHAR = 1;
     private static final int TYPE_NUMBER = 2;
