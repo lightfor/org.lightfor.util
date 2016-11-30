@@ -66,9 +66,9 @@ public enum  ResponseUtils {
     /**
      * 发送内容。使用UTF-8编码。
      *
-     * @param response
-     * @param contentType
-     * @param text
+     * @param response HttpServletResponse
+     * @param contentType 内容类型
+     * @param text 文本
      */
     private static void render(HttpServletResponse response, String contentType, String text) {
         response.setContentType(contentType);
