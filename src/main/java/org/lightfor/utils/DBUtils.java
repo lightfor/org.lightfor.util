@@ -19,11 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * 数据库工具类
  * Created by Light on 2016/8/13.
  */
-public class DBUtils {
+public enum DBUtils {
+    INSTANCE;
 
     private static final Logger logger = LoggerFactory.getLogger(DBUtils.class);
     private static Connection conn=null;
-    private static Map<String, PreparedStatement> map = new ConcurrentHashMap<>();
 
     public static void init(String driver, String url, String user, String password){
         try {
@@ -36,16 +36,6 @@ public class DBUtils {
 
     public static void destroy(){
         try {
-            for(Map.Entry<String, PreparedStatement> entry: map.entrySet()){
-                PreparedStatement p = entry.getValue();
-                if(p != null){
-                    try {
-                        p.close();
-                    }catch (Exception e){
-                        logger.error("清理异常",e);
-                    }
-                }
-            }
             if(conn !=  null){
                 conn.close();
             }
@@ -76,6 +66,7 @@ public class DBUtils {
                 }
             }
             rs.close();
+            preparedStatement.close();
         } catch (Exception e) {
             logger.error("无参查询单条异常", e);
         }
@@ -94,6 +85,7 @@ public class DBUtils {
                 }
             }
             rs.close();
+            preparedStatement.close();
         } catch (Exception e) {
             logger.error("有参查询单条异常", e);
         }
@@ -132,6 +124,7 @@ public class DBUtils {
             ResultSet rs = preparedStatement.executeQuery();
             getResult(result, rs);
             rs.close();
+            preparedStatement.close();
         } catch (Exception e) {
             logger.error("有参查询全部异常", e);
         }
@@ -156,6 +149,7 @@ public class DBUtils {
             ResultSet rs = preparedStatement.executeQuery();
             getResult(result, rs);
             rs.close();
+            preparedStatement.close();
         } catch (Exception e) {
             logger.error("有参查询全部异常", e);
         }
@@ -191,14 +185,7 @@ public class DBUtils {
     }
 
     private static PreparedStatement getPreparedStatement(String sql) throws SQLException {
-        PreparedStatement preparedStatement;
-        if(map.containsKey(sql)){
-            preparedStatement = map.get(sql);
-        } else {
-            preparedStatement = conn.prepareStatement(sql);
-            map.put(sql, preparedStatement);
-        }
-        return preparedStatement;
+        return conn.prepareStatement(sql);
     }
 
     private static PreparedStatement getPreparedStatement(String sql, Map<String, String> paramMap) throws SQLException {
@@ -215,7 +202,9 @@ public class DBUtils {
     public static int insert(String sql){
         try{
             PreparedStatement preparedStatement = getPreparedStatement(sql);
-            return preparedStatement.executeUpdate();
+            int i = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return i;
         } catch(Exception e){
             logger.error("无参插入异常",e);
         }
@@ -225,7 +214,9 @@ public class DBUtils {
     public static int insert(String sql, Map<String, String> paramMap){
         try{
             PreparedStatement preparedStatement = getPreparedStatement(sql, paramMap);
-            return preparedStatement.executeUpdate();
+            int i = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return i;
         } catch(Exception e){
             logger.error("有参插入异常",e);
         }
@@ -235,7 +226,9 @@ public class DBUtils {
     public static int update(String sql){
         try{
             PreparedStatement preparedStatement = getPreparedStatement(sql);
-            return preparedStatement.executeUpdate();
+            int i = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return i;
         } catch(Exception e){
             logger.error("无参更新异常",e);
         }
@@ -245,7 +238,9 @@ public class DBUtils {
     public static int update(String sql, Map<String,String> paramMap){
         try{
             PreparedStatement preparedStatement = getPreparedStatement(sql, paramMap);
-            return preparedStatement.executeUpdate();
+            int i = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return i;
         } catch(Exception e){
             logger.error("有参更新异常",e);
         }
@@ -255,7 +250,9 @@ public class DBUtils {
     public static int delete(String sql){
         try{
             PreparedStatement preparedStatement = getPreparedStatement(sql);
-            return preparedStatement.executeUpdate();
+            int i = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return i;
         } catch(Exception e){
             logger.error("无参删除异常",e);
         }
@@ -265,7 +262,9 @@ public class DBUtils {
     public static int delete(String sql, Map<String,String> paramMap){
         try{
             PreparedStatement preparedStatement = getPreparedStatement(sql, paramMap);
-            return preparedStatement.executeUpdate();
+            int i = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return i;
         } catch(Exception e){
             logger.error("有参删除异常",e);
         }
