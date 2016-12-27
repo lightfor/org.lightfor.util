@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 /**
  * IP工具类

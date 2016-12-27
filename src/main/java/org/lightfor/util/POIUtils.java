@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;

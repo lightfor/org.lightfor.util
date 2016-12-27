@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

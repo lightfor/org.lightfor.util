@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

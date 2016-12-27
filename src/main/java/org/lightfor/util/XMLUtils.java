@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

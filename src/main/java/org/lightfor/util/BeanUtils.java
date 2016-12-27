@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;

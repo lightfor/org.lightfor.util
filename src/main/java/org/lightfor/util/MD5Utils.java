@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import java.io.File;
 import java.io.FileInputStream;

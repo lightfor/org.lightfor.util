@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import java.io.BufferedReader;
 import java.io.File;

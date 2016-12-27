@@ -1,4 +1,4 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

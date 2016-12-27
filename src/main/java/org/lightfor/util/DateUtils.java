@@ -1,8 +1,7 @@
-package org.lightfor.utils;
+package org.lightfor.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * 时间工具类
