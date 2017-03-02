@@ -5,17 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.lightfor</groupId>
-    <artifactId>utils</artifactId>
+    <artifactId>util</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <!-- core start !-->
         <slf4j-api.version>1.7.21</slf4j-api.version>
-        <logback.version>1.1.7</logback.version>
         <!-- core end !-->
 
-        <mysql-connector-java.version>5.1.39</mysql-connector-java.version>
         <fastjson.version>1.2.16</fastjson.version>
+        <poi.version>3.10-FINAL</poi.version>
 
         <!-- provided start -->
         <servlet-api.version>2.5</servlet-api.version>
@@ -23,6 +22,8 @@
         <!-- provided end -->
 
         <!-- test start -->
+        <mysql-connector-java.version>5.1.39</mysql-connector-java.version>
+        <logback.version>1.1.7</logback.version>
         <junit.version>4.11</junit.version>
         <!-- test end -->
 
@@ -36,31 +37,16 @@
             <version>${slf4j-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-        <!-- core end !-->
-
-        <!--mysql driver-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
-        </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <!-- core end !-->
 
 
         <!-- provided start -->
@@ -78,9 +64,34 @@
             <scope>provided</scope>
         </dependency>
         <!--servlet/jsp api end-->
+
+
         <!-- provided end -->
 
         <!-- test start -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>notfound.oracle</groupId>
+            <artifactId>oracle</artifactId>
+            <version>6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -88,9 +99,28 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>3.10-FINAL</version>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.9.1</version>
+            <scope>test</scope>
         </dependency>
         <!-- test end -->
     </dependencies>
