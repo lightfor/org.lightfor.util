@@ -81,18 +81,21 @@ public enum StringUtils {
         return orderStr.toString();
     }
 
-    public static boolean isBlank(String str) {
+    public static boolean isBlank(final CharSequence cs) {
         int strLen;
-        if(str != null && (strLen = str.length()) != 0) {
-            for(int i = 0; i < strLen; ++i) {
-                if(!Character.isWhitespace(str.charAt(i))) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
+        if (cs == null || (strLen = cs.length()) == 0) {
             return true;
         }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isNotBlank(final CharSequence cs){
+        return !isBlank(cs);
     }
 
     public static String[] split(String str, char separatorChar) {
