@@ -1,4 +1,6 @@
-package org.lightfor.util;
+package org.lightfor.util.code;
+
+import org.lightfor.util.RegexUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,16 +16,16 @@ public enum  GenCodeUtils {
     private static final int TYPE_NUMBER = 2;
     private static final int TYPE_TIMESTAMP = 3;
     private static final int TYPE_VERSION = 4;
+    private static final int TYPE_ID = 5;
     private static final int TYPE_UNKNOWN = 99;
 
 
     /**
      *
-     * @param fields 成员变量
-     * @param withAnnotation    是否生成注解
+     * @param genCodeConfig 代码生成配置
      * @return 生成代码
      */
-    public static String genFields(String[] fields, Boolean withAnnotation) {
+    public static String genFields(GenCodeConfig genCodeConfig) {
 
         String[] split;
 
@@ -33,7 +35,7 @@ public enum  GenCodeUtils {
         int typeResult;
 
         StringBuffer sb = new StringBuffer(200);
-        for (String field : fields) {
+        for (String field : genCodeConfig.getFields()) {
             field = field.toLowerCase();
             if (field.contains("\t")) {
                 split = field.split("\t");
@@ -54,8 +56,9 @@ public enum  GenCodeUtils {
                     typeResult = TYPE_UNKNOWN;
                 }
 
-                if(withAnnotation){
+                if(genCodeConfig.isWithAnnotation()){
                     if (column.compareToIgnoreCase("id") == 0) {
+                        typeResult = TYPE_ID;
                         sb.append("@Id");
                     } else if (column.compareToIgnoreCase("version") == 0) {
                         typeResult = TYPE_VERSION;
@@ -64,7 +67,7 @@ public enum  GenCodeUtils {
                         sb.append("@Column(name=\"").append(split[0].toUpperCase()).append("\"");
                         if (typeResult == TYPE_VARCHAR) {
                             String length = RegexUtils.returnFirstMatch(type, "\\((\\d+)\\)");
-                            if (length != null) {
+                            if (genCodeConfig.isWithCharLength() && length != null) {
                                 sb.append(", length=").append(length);
                             }
                             sb.append(")");
@@ -79,7 +82,10 @@ public enum  GenCodeUtils {
                             }
                             sb.append(")");
                         } else if (typeResult == TYPE_TIMESTAMP) {
-                            sb.append(")\n").append("@Temporal(TemporalType.TIMESTAMP)");
+                            sb.append(")");
+                            if(genCodeConfig.isWithTemporalAnnotation()){
+                                sb.append("\n@Temporal(TemporalType.TIMESTAMP)");
+                            }
                         } else {
                             sb.append(")");
                         }
@@ -95,7 +101,9 @@ public enum  GenCodeUtils {
                 } else if (typeResult == TYPE_TIMESTAMP) {
                     sb.append("Date ");
                 } else if (typeResult == TYPE_VERSION) {
-                    sb.append("Integer ");
+                    sb.append("long ");
+                } else if (typeResult == TYPE_ID) {
+                    sb.append("long ");
                 } else {
                     sb.append("String ");
                 }
