@@ -32,6 +32,7 @@ public enum  GenCodeUtils {
         Pattern pattern = Pattern.compile("_(\\w)");
         Matcher matcher;
         String type;
+        String column;
         int typeResult;
 
         StringBuffer sb = new StringBuffer(200);
@@ -41,7 +42,7 @@ public enum  GenCodeUtils {
                 split = field.split("\t");
                 matcher = pattern.matcher(split[0]);
                 type = split[1].toLowerCase();
-                String column = split[0];
+                column = split[0];
                 if (split.length == 3) {
                     sb.append("/** ").append(split[2]).append(" */").append("\n");
                 }
@@ -59,10 +60,13 @@ public enum  GenCodeUtils {
                 if(genCodeConfig.isWithAnnotation()){
                     if (column.compareToIgnoreCase("id") == 0) {
                         typeResult = TYPE_ID;
-                        sb.append("@Id");
+                        sb.append("@Id\n");
+                        sb.append("@SequenceGenerator( name = \"").append(genCodeConfig.getTableName()).append("_SEQ_GENERATOR\", sequenceName = \"").append(genCodeConfig.getTableName()).append("_SEQ\", allocationSize = 1 )\n");
+                        sb.append("@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = \"").append(genCodeConfig.getTableName()).append("_SEQ_GENERATOR\" )\n");
+                        sb.append("@Column( name = \"ID\" )");
                     } else if (column.compareToIgnoreCase("version") == 0) {
                         typeResult = TYPE_VERSION;
-                        sb.append("@Version\n@Column(name = \"VERSION\", nullable = false, precision = 22, scale = 0)");
+                        sb.append("@Version\n@Column(name = \"VERSION\", nullable = false, precision = 22)");
                     } else {
                         sb.append("@Column(name=\"").append(split[0].toUpperCase()).append("\"");
                         if (typeResult == TYPE_VARCHAR) {
@@ -119,5 +123,67 @@ public enum  GenCodeUtils {
 
         }
         return sb.toString();
+    }
+
+    public static String genClassName(GenCodeConfig genCodeConfig){
+        StringBuffer sb = new StringBuffer(32);
+        Pattern pattern = Pattern.compile("^(\\w)|_(\\w)");
+        Matcher matcher = pattern.matcher(genCodeConfig.getTableName().toLowerCase());
+        while (matcher.find()) {
+            if(matcher.group(1) != null){
+                matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+            } else if(matcher.group(2) != null){
+                matcher.appendReplacement(sb, matcher.group(2).toUpperCase());
+            }
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    public static String genCreateSQL(GenCodeConfig genCodeConfig){
+
+        String[] split;
+
+        String type;
+        String column;
+        String comment;
+
+        StringBuilder createSQL = new StringBuilder(400);
+        StringBuilder commentSQL = new StringBuilder(400);
+        StringBuilder seqSQL = new StringBuilder(200);
+
+        commentSQL.append("-- Add comments to the table\n");
+        commentSQL.append("comment on table ").append(genCodeConfig.getTableName()).append("\n");
+        commentSQL.append("  is '").append(genCodeConfig.getTableComment()).append("';\n");
+        commentSQL.append("-- Add comments to the columns\n");
+
+        seqSQL.append("CREATE SEQUENCE ").append(genCodeConfig.getTableName()).append("_SEQ").append(" MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20;");
+
+        createSQL.append("-- Create table\n");
+        createSQL.append("create table ").append(genCodeConfig.getTableName()).append("\n");
+        createSQL.append("(\n");
+        for (String field : genCodeConfig.getFields()) {
+            field = field.toUpperCase();
+            if (field.contains("\t")) {
+                split = field.split("\t");
+                column = split[0];
+                type = split[1];
+                comment = split[2];
+
+                commentSQL.append("comment on column ").append(genCodeConfig.getTableName()).append(".").append(column).append("\n");
+                commentSQL.append("  is '").append(comment).append("';\n");
+
+                createSQL.append("  ").append(column).append("  ").append(type);
+
+                if ("ID".equals(column)) {
+                    createSQL.append(" PRIMARY KEY");
+                }
+
+                createSQL.append(",\n");
+            }
+        }
+        createSQL.deleteCharAt(createSQL.length() - 1).deleteCharAt(createSQL.length() - 1).append("\n);");
+        createSQL.append("\n").append(commentSQL).append("\n").append(seqSQL);
+        return createSQL.toString();
     }
 }

@@ -10,6 +10,9 @@ public class GenCodeConfig {
     private boolean withCharLength = false;
     private boolean withTemporalAnnotation = false;
 
+    private String tableName;
+    private String tableComment;
+
     public String[] getFields() {
         return fields;
     }
@@ -40,5 +43,21 @@ public class GenCodeConfig {
 
     public void setWithTemporalAnnotation(boolean withTemporalAnnotation) {
         this.withTemporalAnnotation = withTemporalAnnotation;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getTableComment() {
+        return tableComment;
+    }
+
+    public void setTableComment(String tableComment) {
+        this.tableComment = tableComment;
     }
 }
