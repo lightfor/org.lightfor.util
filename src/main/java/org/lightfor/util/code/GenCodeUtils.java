@@ -2,6 +2,10 @@ package org.lightfor.util.code;
 
 import org.lightfor.util.RegexUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,10 +48,17 @@ public enum  GenCodeUtils {
                 type = split[1].toLowerCase();
                 column = split[0];
                 if (split.length == 3) {
+                    if(genCodeConfig.isIndentWithFourSpaces()){
+                        sb.append("    ");
+                    }
                     sb.append("/** ").append(split[2]).append(" */").append("\n");
                 }
 
-                if (type.contains("varchar")) {
+                if(column.compareToIgnoreCase("id") == 0){
+                    typeResult = TYPE_ID;
+                } else if(column.compareToIgnoreCase("version") == 0){
+                    typeResult = TYPE_VERSION;
+                } else if (type.contains("varchar")) {
                     typeResult = TYPE_VARCHAR;
                 } else if (type.contains("number")) {
                     typeResult = TYPE_NUMBER;
@@ -58,14 +69,12 @@ public enum  GenCodeUtils {
                 }
 
                 if(genCodeConfig.isWithAnnotation()){
-                    if (column.compareToIgnoreCase("id") == 0) {
-                        typeResult = TYPE_ID;
+                    if (typeResult == TYPE_ID) {
                         sb.append("@Id\n");
                         sb.append("@SequenceGenerator( name = \"").append(genCodeConfig.getTableName()).append("_SEQ_GENERATOR\", sequenceName = \"").append(genCodeConfig.getTableName()).append("_SEQ\", allocationSize = 1 )\n");
                         sb.append("@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = \"").append(genCodeConfig.getTableName()).append("_SEQ_GENERATOR\" )\n");
                         sb.append("@Column( name = \"ID\" )");
-                    } else if (column.compareToIgnoreCase("version") == 0) {
-                        typeResult = TYPE_VERSION;
+                    } else if (typeResult == TYPE_VERSION) {
                         sb.append("@Version\n@Column(name = \"VERSION\", nullable = false, precision = 22)");
                     } else {
                         sb.append("@Column(name=\"").append(split[0].toUpperCase()).append("\"");
@@ -97,6 +106,10 @@ public enum  GenCodeUtils {
                     sb.append("\n");
                 }
 
+                if(genCodeConfig.isIndentWithFourSpaces()){
+                    sb.append("    ");
+                }
+
                 sb.append("private ");
                 if (typeResult == TYPE_VARCHAR) {
                     sb.append("String ");
@@ -107,7 +120,7 @@ public enum  GenCodeUtils {
                 } else if (typeResult == TYPE_VERSION) {
                     sb.append("long ");
                 } else if (typeResult == TYPE_ID) {
-                    sb.append("long ");
+                    sb.append("Integer ");
                 } else {
                     sb.append("String ");
                 }
@@ -185,5 +198,58 @@ public enum  GenCodeUtils {
         createSQL.deleteCharAt(createSQL.length() - 1).deleteCharAt(createSQL.length() - 1).append("\n);");
         createSQL.append("\n").append(commentSQL).append("\n").append(seqSQL);
         return createSQL.toString();
+    }
+
+    public static List<String> getFields(GenCodeConfig genCodeConfig){
+
+        String[] split;
+
+        Pattern pattern = Pattern.compile("_(\\w)");
+        Matcher matcher;
+
+        List<String> fields = new ArrayList<>();
+        StringBuffer sb = new StringBuffer();
+        for (String field : genCodeConfig.getFields()) {
+            sb.delete(0, sb.length());
+            field = field.toLowerCase();
+            split = field.split("\t");
+            matcher = pattern.matcher(split[0]);
+            while (matcher.find()) {
+                matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+            }
+            matcher.appendTail(sb);
+            fields.add(sb.toString());
+        }
+        return fields;
+    }
+
+    public static List<Map<String,String>> getFieldsForPage(GenCodeConfig genCodeConfig){
+        String[] split;
+
+        Pattern pattern = Pattern.compile("_(\\w)");
+        Matcher matcher;
+
+        List<Map<String,String>> fields = new ArrayList<>();
+        StringBuffer sb = new StringBuffer();
+        for (String field : genCodeConfig.getFields()) {
+            sb.delete(0, sb.length());
+            field = field.toLowerCase();
+            split = field.split("\t");
+            matcher = pattern.matcher(split[0]);
+            while (matcher.find()) {
+                matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+            }
+            matcher.appendTail(sb);
+            Map<String, String> map = new HashMap<>();
+            map.put("column", split[0]);
+            map.put("field", sb.toString());
+            map.put("comment", split[2]);
+            fields.add(map);
+        }
+        return fields;
+    }
+
+    public static String getTableName(GenCodeConfig genCodeConfig){
+        return genCodeConfig.getTableName();
     }
 }

@@ -10,8 +10,18 @@ public class GenCodeConfig {
     private boolean withCharLength = false;
     private boolean withTemporalAnnotation = false;
 
+    private boolean indentWithFourSpaces = false;
+
     private String tableName;
     private String tableComment;
+
+    private String moduleName;
+
+    private boolean updateMethod = true;
+
+    private boolean saveMethod = true;
+
+    private boolean deleteMethod = true;
 
     public String[] getFields() {
         return fields;
@@ -45,6 +55,14 @@ public class GenCodeConfig {
         this.withTemporalAnnotation = withTemporalAnnotation;
     }
 
+    public boolean isIndentWithFourSpaces() {
+        return indentWithFourSpaces;
+    }
+
+    public void setIndentWithFourSpaces(boolean indentWithFourSpaces) {
+        this.indentWithFourSpaces = indentWithFourSpaces;
+    }
+
     public String getTableName() {
         return tableName;
     }
@@ -59,5 +77,37 @@ public class GenCodeConfig {
 
     public void setTableComment(String tableComment) {
         this.tableComment = tableComment;
+    }
+
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public boolean isUpdateMethod() {
+        return updateMethod;
+    }
+
+    public void setUpdateMethod(boolean updateMethod) {
+        this.updateMethod = updateMethod;
+    }
+
+    public boolean isSaveMethod() {
+        return saveMethod;
+    }
+
+    public void setSaveMethod(boolean saveMethod) {
+        this.saveMethod = saveMethod;
+    }
+
+    public boolean isDeleteMethod() {
+        return deleteMethod;
+    }
+
+    public void setDeleteMethod(boolean deleteMethod) {
+        this.deleteMethod = deleteMethod;
     }
 }
