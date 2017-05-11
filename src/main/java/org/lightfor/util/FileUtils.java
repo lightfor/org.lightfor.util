@@ -1,5 +1,8 @@
 package org.lightfor.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,10 +18,14 @@ import java.nio.file.Paths;
 public enum  FileUtils {
     INSTANCE;
 
+    private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
+
     public static String fileToStringJDK6elow(String filePath){
+        InputStream is = null;
+        BufferedReader br = null;
         try {
-            InputStream is = new FileInputStream(filePath);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            is = new FileInputStream(filePath);
+            br = new BufferedReader(new InputStreamReader(is));
 
             String line = br.readLine();
             StringBuilder sb = new StringBuilder();
@@ -30,8 +37,59 @@ public enum  FileUtils {
             return sb.toString();
         } catch (Exception e) {
             return null;
+        } finally {
+            if(br != null){
+                try{
+                    br.close();
+                } catch (Exception e){
+                    logger.error("close reader", e);
+                }
+            }
+            if(is != null){
+                try{
+                    is.close();
+                } catch (Exception e){
+                    logger.error("close input stream", e);
+                }
+            }
         }
     }
+
+    public static Long countLine(String filePath){
+        Long count = 0L;
+        InputStream is = null;
+        BufferedReader br = null;
+        try {
+            is = new FileInputStream(filePath);
+            br = new BufferedReader(new InputStreamReader(is));
+
+            String line = br.readLine();
+
+            while(line != null) {
+                count++;
+                line = br.readLine();
+            }
+            return count;
+        } catch (Exception e) {
+            return count;
+        } finally {
+            if(br != null){
+                try{
+                    br.close();
+                } catch (Exception e){
+                    logger.error("close reader", e);
+                }
+            }
+            if(is != null){
+                try{
+                    is.close();
+                } catch (Exception e){
+                    logger.error("close input stream", e);
+                }
+            }
+        }
+    }
+
 
     public static String fileToStringJDK7(String filePath){
         try {
