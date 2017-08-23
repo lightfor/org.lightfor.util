@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,8 @@ public enum DBUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(DBUtils.class);
     private static Connection conn=null;
+
+    private static Statement statement = null;
 
     public static void init(String driver, String url, String user, String password){
         try {
@@ -206,6 +209,36 @@ public enum DBUtils {
             return i;
         } catch(Exception e){
             logger.error("无参插入异常",e);
+        }
+        return -1;
+    }
+
+    public static int addBatch(String sql){
+        try{
+            if(statement == null){
+                statement = conn.createStatement();
+            }
+            statement.addBatch(sql);
+        } catch(Exception e){
+            logger.error("添加批量异常",e);
+        }
+        return -1;
+    }
+
+    public static int executeBatch(){
+        try{
+            statement.executeBatch();
+        } catch(Exception e){
+            logger.error("执行批量异常",e);
+        }
+        return -1;
+    }
+
+    public static int clearBatch(){
+        try{
+            statement.clearBatch();
+        } catch(Exception e){
+            logger.error("清空批量异常",e);
         }
         return -1;
     }
