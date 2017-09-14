@@ -22,7 +22,6 @@ import java.util.Map;
 public enum DBUtils {
     INSTANCE;
 
-    private static final Logger logger = LoggerFactory.getLogger(DBUtils.class);
     private static Connection conn=null;
 
     private static Statement statement = null;
@@ -32,7 +31,7 @@ public enum DBUtils {
             Class.forName(driver);
             conn =  DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
-            logger.error("加载驱动异常", e);
+            LogUtils.error("加载驱动异常", e);
         }
     }
 
@@ -42,7 +41,7 @@ public enum DBUtils {
                 conn.close();
             }
         } catch (Exception e) {
-            logger.error("清理异常",e);
+            LogUtils.error("清理异常",e);
         }
     }
 
@@ -51,7 +50,7 @@ public enum DBUtils {
             Class.forName(driver);
             return DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
-            logger.error("获取连接异常", e);
+            LogUtils.error("获取连接异常", e);
         }
         return null;
     }
@@ -70,7 +69,7 @@ public enum DBUtils {
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
-            logger.error("无参查询单条异常", e);
+            LogUtils.error("无参查询单条异常", e);
         }
         return result;
     }
@@ -89,7 +88,7 @@ public enum DBUtils {
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
-            logger.error("有参查询单条异常", e);
+            LogUtils.error("有参查询单条异常", e);
         }
         return result;
     }
@@ -114,7 +113,7 @@ public enum DBUtils {
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
-            logger.error("有参查询单条异常", e);
+            LogUtils.error("有参查询单条异常", e);
         }
         return result;
     }
@@ -128,7 +127,7 @@ public enum DBUtils {
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
-            logger.error("有参查询全部异常", e);
+            LogUtils.error("有参查询全部异常", e);
         }
         return result;
     }
@@ -153,7 +152,7 @@ public enum DBUtils {
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
-            logger.error("有参查询全部异常", e);
+            LogUtils.error("有参查询全部异常", e);
         }
         return result;
     }
@@ -181,7 +180,7 @@ public enum DBUtils {
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
-            logger.error("有参查询全部异常", e);
+            LogUtils.error("有参查询全部异常", e);
         }
         return result;
     }
@@ -208,7 +207,7 @@ public enum DBUtils {
             preparedStatement.close();
             return i;
         } catch(Exception e){
-            logger.error("无参插入异常",e);
+            LogUtils.error("无参插入异常",e);
         }
         return -1;
     }
@@ -220,7 +219,7 @@ public enum DBUtils {
             }
             statement.addBatch(sql);
         } catch(Exception e){
-            logger.error("添加批量异常",e);
+            LogUtils.error("添加批量异常",e);
         }
         return -1;
     }
@@ -229,7 +228,7 @@ public enum DBUtils {
         try{
             statement.executeBatch();
         } catch(Exception e){
-            logger.error("执行批量异常",e);
+            LogUtils.error("执行批量异常",e);
         }
         return -1;
     }
@@ -238,7 +237,7 @@ public enum DBUtils {
         try{
             statement.clearBatch();
         } catch(Exception e){
-            logger.error("清空批量异常",e);
+            LogUtils.error("清空批量异常",e);
         }
         return -1;
     }
@@ -250,7 +249,7 @@ public enum DBUtils {
             preparedStatement.close();
             return i;
         } catch(Exception e){
-            logger.error("有参插入异常",e);
+            LogUtils.error("有参插入异常",e);
         }
         return -1;
     }
@@ -262,7 +261,7 @@ public enum DBUtils {
             preparedStatement.close();
             return i;
         } catch(Exception e){
-            logger.error("无参更新异常",e);
+            LogUtils.error("无参更新异常",e);
         }
         return -1;
     }
@@ -274,7 +273,7 @@ public enum DBUtils {
             preparedStatement.close();
             return i;
         } catch(Exception e){
-            logger.error("有参更新异常",e);
+            LogUtils.error("有参更新异常",e);
         }
         return -1;
     }
@@ -286,7 +285,7 @@ public enum DBUtils {
             preparedStatement.close();
             return i;
         } catch(Exception e){
-            logger.error("无参删除异常",e);
+            LogUtils.error("无参删除异常",e);
         }
         return -1;
     }
@@ -298,7 +297,7 @@ public enum DBUtils {
             preparedStatement.close();
             return i;
         } catch(Exception e){
-            logger.error("有参删除异常",e);
+            LogUtils.error("有参删除异常",e);
         }
         return -1;
     }
@@ -307,7 +306,7 @@ public enum DBUtils {
         try {
             conn.setAutoCommit(autoCommit);
         } catch (Exception e) {
-            logger.error("设置自动提交异常",e);
+            LogUtils.error("设置自动提交异常",e);
         }
     }
 
@@ -315,7 +314,7 @@ public enum DBUtils {
         try {
             conn.commit();
         } catch (Exception e) {
-            logger.error("提交事务异常",e);
+            LogUtils.error("提交事务异常",e);
         }
     }
 
@@ -323,7 +322,7 @@ public enum DBUtils {
         try {
             conn.rollback();
         } catch (Exception e) {
-            logger.error("回滚事务异常",e);
+            LogUtils.error("回滚事务异常",e);
         }
     }
 }

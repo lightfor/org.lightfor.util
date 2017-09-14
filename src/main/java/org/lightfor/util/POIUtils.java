@@ -26,8 +26,6 @@ import java.util.Map;
 public enum  POIUtils {
     INSTANCE;
 
-    private static final Logger logger = LoggerFactory.getLogger(POIUtils.class);
-
     public static void writeToFile(OutputStream os, String sheetName, String[] titles, String[] cells, List<Map<String,String>> excelList){
         SXSSFWorkbook  wb = new SXSSFWorkbook(100);
         Sheet sheet = wb.createSheet(sheetName);
@@ -46,12 +44,12 @@ public enum  POIUtils {
             wb.write(os);
             os.close();
         } catch (Exception e) {
-            logger.error("写入异常", e);
+            LogUtils.error("写入异常", e);
         }
         try {
             wb.dispose();
         } catch (Exception e) {
-            logger.error("清理临时文件异常",e);
+            LogUtils.error("清理临时文件异常",e);
         }
 
     }

@@ -18,8 +18,6 @@ import java.nio.file.Paths;
 public enum  FileUtils {
     INSTANCE;
 
-    private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
-
     public static String fileToStringJDK6elow(String filePath){
         InputStream is = null;
         BufferedReader br = null;
@@ -42,14 +40,14 @@ public enum  FileUtils {
                 try{
                     br.close();
                 } catch (Exception e){
-                    logger.error("close reader", e);
+                    LogUtils.error("close reader", e);
                 }
             }
             if(is != null){
                 try{
                     is.close();
                 } catch (Exception e){
-                    logger.error("close input stream", e);
+                    LogUtils.error("close input stream", e);
                 }
             }
         }
@@ -77,14 +75,14 @@ public enum  FileUtils {
                 try{
                     br.close();
                 } catch (Exception e){
-                    logger.error("close reader", e);
+                    LogUtils.error("close reader", e);
                 }
             }
             if(is != null){
                 try{
                     is.close();
                 } catch (Exception e){
-                    logger.error("close input stream", e);
+                    LogUtils.error("close input stream", e);
                 }
             }
         }
