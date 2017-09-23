@@ -57,77 +57,85 @@ public enum DBUtils {
 
     public static Map<String,String> selectOne(String sql){
         Map<String, String> result = new HashMap<>();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = getPreparedStatement(sql);
-            ResultSet rs = preparedStatement.executeQuery();
+            preparedStatement = getPreparedStatement(sql);
+            rs = preparedStatement.executeQuery();
             if(rs.next()){
                 ResultSetMetaData metaData = rs.getMetaData();
                 for(int i = metaData.getColumnCount(); i > 0 ; i--){
                     result.put(metaData.getColumnName(i), rs.getString(i));
                 }
             }
-            rs.close();
-            preparedStatement.close();
         } catch (Exception e) {
             LogUtils.error("无参查询单条异常", e);
+        } finally {
+            cleanResource(rs, preparedStatement);
         }
         return result;
     }
 
     public static Map<String,String> selectOne(String sql, Map<String,String> paramMap){
         Map<String, String> result = new HashMap<>();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = getPreparedStatement(sql, paramMap);
-            ResultSet rs = preparedStatement.executeQuery();
+            preparedStatement = getPreparedStatement(sql, paramMap);
+            rs = preparedStatement.executeQuery();
             if(rs.next()){
                 ResultSetMetaData metaData = rs.getMetaData();
                 for(int i = metaData.getColumnCount(); i > 0 ; i--){
                     result.put(metaData.getColumnName(i), rs.getString(i));
                 }
             }
-            rs.close();
-            preparedStatement.close();
         } catch (Exception e) {
             LogUtils.error("有参查询单条异常", e);
+        } finally {
+            cleanResource(rs, preparedStatement);
         }
         return result;
     }
 
     public static Map<String,String> selectOne(String sql, Map<String,String> paramMap, Connection conn){
         Map<String, String> result = new HashMap<>();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
         try {
             List<String> params = RegexUtils.returnAllMatch(sql, "#\\{(.*?)\\}");
             sql = sql.replaceAll("#\\{(.*?)\\}", "?");
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement = conn.prepareStatement(sql);
             int i = 0;
             for(String param : params){
                 preparedStatement.setString(++i,paramMap.get(param));
             }
-            ResultSet rs = preparedStatement.executeQuery();
+            rs = preparedStatement.executeQuery();
             if(rs.next()){
                 ResultSetMetaData metaData = rs.getMetaData();
                 for(i = metaData.getColumnCount(); i > 0 ; i--){
                     result.put(metaData.getColumnName(i), rs.getString(i));
                 }
             }
-            rs.close();
-            preparedStatement.close();
         } catch (Exception e) {
             LogUtils.error("有参查询单条异常", e);
+        } finally {
+            cleanResource(rs, preparedStatement);
         }
         return result;
     }
 
     public static List<Map<String,String>> selectAll(String sql){
         List<Map<String, String>> result = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = getPreparedStatement(sql);
-            ResultSet rs = preparedStatement.executeQuery();
+            preparedStatement = getPreparedStatement(sql);
+            rs = preparedStatement.executeQuery();
             getResult(result, rs);
-            rs.close();
-            preparedStatement.close();
         } catch (Exception e) {
             LogUtils.error("有参查询全部异常", e);
+        } finally {
+            cleanResource(rs, preparedStatement);
         }
         return result;
     }
@@ -145,14 +153,16 @@ public enum DBUtils {
 
     public static List<Map<String,String>> selectAll(String sql, Map<String,String> paramMap){
         List<Map<String, String>> result = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = getPreparedStatement(sql, paramMap);
-            ResultSet rs = preparedStatement.executeQuery();
+            preparedStatement = getPreparedStatement(sql, paramMap);
+            rs = preparedStatement.executeQuery();
             getResult(result, rs);
-            rs.close();
-            preparedStatement.close();
         } catch (Exception e) {
             LogUtils.error("有参查询全部异常", e);
+        } finally {
+            cleanResource(rs, preparedStatement);
         }
         return result;
     }
@@ -160,15 +170,17 @@ public enum DBUtils {
 
     public static List<Map<String,String>> selectAll(String sql, Map<String,String> paramMap, Connection conn){
         List<Map<String, String>> result = new ArrayList<>();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
         try {
             List<String> params = RegexUtils.returnAllMatch(sql, "#\\{(.*?)\\}");
             sql = sql.replaceAll("#\\{(.*?)\\}", "?");
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement = conn.prepareStatement(sql);
             int i = 0;
             for(String param : params){
                 preparedStatement.setString(++i,paramMap.get(param));
             }
-            ResultSet rs = preparedStatement.executeQuery();
+            rs = preparedStatement.executeQuery();
             while(rs.next()){
                 Map<String, String> ele = new HashMap<>();
                 ResultSetMetaData metaData = rs.getMetaData();
@@ -177,12 +189,33 @@ public enum DBUtils {
                 }
                 result.add(ele);
             }
-            rs.close();
-            preparedStatement.close();
         } catch (Exception e) {
             LogUtils.error("有参查询全部异常", e);
+        } finally {
+            cleanResource(rs, preparedStatement);
         }
         return result;
+    }
+
+    private static void cleanResource(ResultSet rs, PreparedStatement preparedStatement) {
+        if(rs != null){
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                LogUtils.error("释放ResultSet异常", e);
+            }
+        }
+        cleanResource(preparedStatement);
+    }
+
+    private static void cleanResource(PreparedStatement preparedStatement) {
+        if(preparedStatement != null){
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                LogUtils.error("释放PreparedStatement异常", e);
+            }
+        }
     }
 
     private static PreparedStatement getPreparedStatement(String sql) throws SQLException {
@@ -201,13 +234,14 @@ public enum DBUtils {
     }
 
     public static int insert(String sql){
+        PreparedStatement preparedStatement = null;
         try{
-            PreparedStatement preparedStatement = getPreparedStatement(sql);
-            int i = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            return i;
+            preparedStatement = getPreparedStatement(sql);
+            return preparedStatement.executeUpdate();
         } catch(Exception e){
             LogUtils.error("无参插入异常",e);
+        } finally {
+            cleanResource(preparedStatement);
         }
         return -1;
     }
@@ -243,61 +277,66 @@ public enum DBUtils {
     }
 
     public static int insert(String sql, Map<String, String> paramMap){
+        PreparedStatement preparedStatement = null;
         try{
-            PreparedStatement preparedStatement = getPreparedStatement(sql, paramMap);
-            int i = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            return i;
+            preparedStatement = getPreparedStatement(sql, paramMap);
+            return preparedStatement.executeUpdate();
         } catch(Exception e){
             LogUtils.error("有参插入异常",e);
+        } finally {
+            cleanResource(preparedStatement);
         }
         return -1;
     }
 
     public static int update(String sql){
+        PreparedStatement preparedStatement = null;
         try{
-            PreparedStatement preparedStatement = getPreparedStatement(sql);
-            int i = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            return i;
+            preparedStatement = getPreparedStatement(sql);
+            return preparedStatement.executeUpdate();
         } catch(Exception e){
             LogUtils.error("无参更新异常",e);
+        } finally {
+            cleanResource(preparedStatement);
         }
         return -1;
     }
 
     public static int update(String sql, Map<String,String> paramMap){
+        PreparedStatement preparedStatement = null;
         try{
-            PreparedStatement preparedStatement = getPreparedStatement(sql, paramMap);
-            int i = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            return i;
+            preparedStatement = getPreparedStatement(sql, paramMap);
+            return preparedStatement.executeUpdate();
         } catch(Exception e){
             LogUtils.error("有参更新异常",e);
+        } finally {
+            cleanResource(preparedStatement);
         }
         return -1;
     }
 
     public static int delete(String sql){
+        PreparedStatement preparedStatement = null;
         try{
-            PreparedStatement preparedStatement = getPreparedStatement(sql);
-            int i = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            return i;
+            preparedStatement = getPreparedStatement(sql);
+            return preparedStatement.executeUpdate();
         } catch(Exception e){
             LogUtils.error("无参删除异常",e);
+        } finally {
+            cleanResource(preparedStatement);
         }
         return -1;
     }
 
     public static int delete(String sql, Map<String,String> paramMap){
+        PreparedStatement preparedStatement = null;
         try{
-            PreparedStatement preparedStatement = getPreparedStatement(sql, paramMap);
-            int i = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            return i;
+            preparedStatement = getPreparedStatement(sql, paramMap);
+            return preparedStatement.executeUpdate();
         } catch(Exception e){
             LogUtils.error("有参删除异常",e);
+        } finally {
+            cleanResource(preparedStatement);
         }
         return -1;
     }

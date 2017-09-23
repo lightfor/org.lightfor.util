@@ -7,7 +7,7 @@ package org.lightfor.util;
 public enum URLUtils {
     INSTANCE;
 
-    public static String FixedLength(String url){
+    public static String fixedLength(String url){
         if(url == null || url.length() <= 55){
             return url;
         }
