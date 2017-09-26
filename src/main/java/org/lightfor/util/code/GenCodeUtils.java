@@ -3,9 +3,7 @@ package org.lightfor.util.code;
 import org.lightfor.util.RegexUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +27,7 @@ public enum  GenCodeUtils {
      * @param genCodeConfig 代码生成配置
      * @return 生成代码
      */
-    public static String genFields(GenCodeConfig genCodeConfig) {
+    public static String genFieldsStr(GenCodeConfig genCodeConfig) {
 
         String[] split;
 
@@ -154,7 +152,6 @@ public enum  GenCodeUtils {
     }
 
     public static String genCreateSQL(GenCodeConfig genCodeConfig){
-
         String[] split;
 
         String type;
@@ -200,51 +197,57 @@ public enum  GenCodeUtils {
         return createSQL.toString();
     }
 
-    public static List<String> getFields(GenCodeConfig genCodeConfig){
 
-        String[] split;
-
-        Pattern pattern = Pattern.compile("_(\\w)");
-        Matcher matcher;
-
-        List<String> fields = new ArrayList<>();
-        StringBuffer sb = new StringBuffer();
-        for (String field : genCodeConfig.getFields()) {
-            sb.delete(0, sb.length());
-            field = field.toLowerCase();
-            split = field.split("\t");
-            matcher = pattern.matcher(split[0]);
-            while (matcher.find()) {
-                matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
-            }
-            matcher.appendTail(sb);
-            fields.add(sb.toString());
-        }
-        return fields;
+    public static List<Field> getFieldsForView(GenCodeConfig genCodeConfig){
+        return getFields(genCodeConfig.getFieldForViewStr());
     }
 
-    public static List<Map<String,String>> getFieldsForPage(GenCodeConfig genCodeConfig){
+    public static List<Field> getFieldsForAll(GenCodeConfig genCodeConfig){
+        return getFields(genCodeConfig.getFieldsForAllStr());
+    }
+
+    private static List<Field> getFields(String fieldStr) {
         String[] split;
 
         Pattern pattern = Pattern.compile("_(\\w)");
         Matcher matcher;
+        String type;
+        String column;
 
-        List<Map<String,String>> fields = new ArrayList<>();
+        List<Field> fields = new ArrayList<>();
         StringBuffer sb = new StringBuffer();
-        for (String field : genCodeConfig.getFields()) {
+        for (String fieldStrSplit : fieldStr.split("\n")) {
             sb.delete(0, sb.length());
-            field = field.toLowerCase();
-            split = field.split("\t");
+            fieldStrSplit = fieldStrSplit.toLowerCase();
+            split = fieldStrSplit.split("\t");
             matcher = pattern.matcher(split[0]);
+            type = split[1].toLowerCase();
+            column = split[0];
             while (matcher.find()) {
                 matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
             }
             matcher.appendTail(sb);
-            Map<String, String> map = new HashMap<>();
-            map.put("column", split[0]);
-            map.put("field", sb.toString());
-            map.put("comment", split[2]);
-            fields.add(map);
+
+
+
+            Field field = new Field();
+            field.setColumn(split[0]);
+            field.setComment(split[2]);
+            field.setField(sb.toString());
+            if(column.compareToIgnoreCase("id") == 0){
+                field.setType("Integer");
+            } else if(column.compareToIgnoreCase("version") == 0){
+                field.setType("Integer");
+            } else if (type.contains("varchar")) {
+                field.setType("String");
+            } else if (type.contains("number")) {
+                field.setType("String");
+            } else if (type.contains("timestamp")) {
+                field.setType("Date");
+            } else {
+                field.setType("String");
+            }
+            fields.add(field);
         }
         return fields;
     }

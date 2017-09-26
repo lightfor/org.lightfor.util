@@ -17,6 +17,10 @@ public class GenCodeConfig {
 
     private String moduleName;
 
+    private String fieldsForAllStr;
+
+    private String fieldForViewStr;
+
     private boolean updateMethod = true;
 
     private boolean saveMethod = true;
@@ -109,5 +113,21 @@ public class GenCodeConfig {
 
     public void setDeleteMethod(boolean deleteMethod) {
         this.deleteMethod = deleteMethod;
+    }
+
+    public String getFieldsForAllStr() {
+        return fieldsForAllStr;
+    }
+
+    public void setFieldsForAllStr(String fieldsForAllStr) {
+        this.fieldsForAllStr = fieldsForAllStr;
+    }
+
+    public String getFieldForViewStr() {
+        return fieldForViewStr;
+    }
+
+    public void setFieldForViewStr(String fieldForViewStr) {
+        this.fieldForViewStr = fieldForViewStr;
     }
 }
