@@ -11,6 +11,8 @@ import java.util.Date;
 public class DateUtils {
     private static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss";
 
+    private static Long time;
+
     /**
      * 返回标准格式的当前时间
      * @return 默认
@@ -146,5 +148,15 @@ public class DateUtils {
         return calendar.get(Calendar.MILLISECOND);
     }
 
+    public static void start(){
+        time = System.currentTimeMillis();
+    }
+
+    public static Long count(){
+        Long now = System.currentTimeMillis();
+        Long count = now - time;
+        time = now;
+        return count;
+    }
 
 }

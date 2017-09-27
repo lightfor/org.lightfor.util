@@ -26,7 +26,7 @@ public enum ReflectUtils {
             try {
                 result = field.get(obj);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.error("获取成员变量异常", e);
             }
         }
         return result;
@@ -46,7 +46,7 @@ public enum ReflectUtils {
                 field = clazz.getDeclaredField(fieldName);
                 break;
             } catch (NoSuchFieldException e) {
-                //ignore exception
+                LogUtils.error("获取成员变量异常", e);
             }
         }
         return field;
@@ -66,7 +66,7 @@ public enum ReflectUtils {
                 field.setAccessible(true);
                 field.set(obj, fieldValue);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.error("设置成员变量异常", e);
             }
         }
     }

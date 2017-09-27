@@ -13,13 +13,13 @@ import java.security.MessageDigest;
 public enum  MD5Utils {
     INSTANCE;
 
-    private static char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     private static MessageDigest messageDigest = null;
     static {
         try{
             messageDigest = MessageDigest.getInstance("MD5");
         } catch(Exception e){
-            e.printStackTrace();
+            LogUtils.error("初始化MD5实例异常", e);
         }
     }
 
@@ -31,7 +31,7 @@ public enum  MD5Utils {
             messageDigest.update(byteBuffer);
             return bufferToHex(messageDigest.digest());
         } catch(Exception e){
-            e.printStackTrace();
+            LogUtils.error("计算文件MD5异常", e);
         }
         return "";
     }
@@ -41,7 +41,7 @@ public enum  MD5Utils {
             messageDigest.update(string.getBytes());
             return bufferToHex(messageDigest.digest());
         } catch(Exception e){
-            e.printStackTrace();
+            LogUtils.error("计算字符串异常", e);
         }
         return "";
     }

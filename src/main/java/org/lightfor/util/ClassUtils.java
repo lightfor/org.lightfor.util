@@ -44,7 +44,7 @@ public enum  ClassUtils {
             Class<?> clazz = loadClass(clazzStr);
             return instantiate(clazz);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.error("获取实例异常", e);
         }
         return null;
     }
@@ -79,7 +79,7 @@ public enum  ClassUtils {
         try {
             return clazz.newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.error("获取实例异常", e);
         }
         return null;
     }

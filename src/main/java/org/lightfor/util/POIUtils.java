@@ -64,7 +64,7 @@ public enum  POIUtils {
         if(excelList != null){
             for (int i = 0; i < excelList.size(); i++) {
                 int maxRow = SpreadsheetVersion.EXCEL2007.getLastRowIndex() - 1;
-                if (i < 0 || i > maxRow){
+                if (i > maxRow){
                     return;
                 }
                 Row tmpRow = sheet.createRow(i + 1);
