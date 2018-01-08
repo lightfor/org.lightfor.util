@@ -6,12 +6,13 @@ import java.util.Date;
 
 /**
  * 时间工具类
- * Created by Light on 2016/1/29.
+ * @author Light
+ * @date 2016/1/29.
  */
 public class DateUtils {
     private static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss";
 
-    private static Long time;
+    private static ThreadLocal<Long> time = new ThreadLocal<>();
 
     /**
      * 返回标准格式的当前时间
@@ -27,7 +28,9 @@ public class DateUtils {
      * @return 时间字符
      */
     public static String parseTime(Object date) {
-        if(date == null) return null;
+        if(date == null){
+            return null;
+        }
         if(date instanceof Date) {
             return new SimpleDateFormat(DATE_FORMAT_DEFAULT).format(date);
         } else if(date instanceof String) {
@@ -149,14 +152,30 @@ public class DateUtils {
     }
 
     public static void start(){
-        time = System.currentTimeMillis();
+        time.set(System.currentTimeMillis());
     }
 
     public static Long count(){
         Long now = System.currentTimeMillis();
-        Long count = now - time;
-        time = now;
+        Long count = now - time.get();
+        time.set(now);
         return count;
+    }
+
+    public static void remove() {
+        time.remove();
+    }
+
+    public static Date getTomorrow(){
+        Calendar calendar = getCalendar();
+        calendar.add(Calendar.DATE, 1);
+        return calendar.getTime();
+    }
+
+    public static Date getYesterday(){
+        Calendar calendar = getCalendar();
+        calendar.add(Calendar.DATE, -1);
+        return calendar.getTime();
     }
 
 }
