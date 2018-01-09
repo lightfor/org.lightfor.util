@@ -7,7 +7,8 @@ import java.util.Enumeration;
 
 /**
  * IP工具类
- * Created by Light on 2016/11/10.
+ * @author Light
+ * @date 2016/11/10.
  */
 public enum IpUtils {
     INSTANCE;
@@ -39,6 +40,18 @@ public enum IpUtils {
     }
 
     public static String getIpv4() {
+        return getIpv4(false, false);
+    }
+
+    public static String getLocalIpv4() {
+        return getIpv4(false, true);
+    }
+
+    public static String getPublicIpv4() {
+        return getIpv4(true, false);
+    }
+
+    private static String getIpv4(boolean isPublic, boolean isLocal){
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
@@ -52,8 +65,19 @@ public enum IpUtils {
                     if (inetAddress.isLoopbackAddress()) {
                         continue;
                     }
+                    if (isPublic) {
+                        if (inetAddress.isSiteLocalAddress()) {
+                            continue;
+                        }
+                    }
                     if (inetAddress instanceof Inet4Address) {
-                        return inetAddress.getHostAddress();
+                        if(isLocal){
+                            if (inetAddress.isSiteLocalAddress()) {
+                                return inetAddress.getHostAddress();
+                            }
+                        } else {
+                            return inetAddress.getHostAddress();
+                        }
                     }
                 }
             }
