@@ -8,12 +8,13 @@ import java.security.MessageDigest;
 
 /**
  * MD5 relative Class
- * Created by Light on 2016/1/29.
+ * @author Light
+ * @date 2016/1/29.
  */
 public enum  MD5Utils {
     INSTANCE;
 
-    private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     private static MessageDigest messageDigest = null;
     static {
         try{
@@ -46,11 +47,11 @@ public enum  MD5Utils {
         return "";
     }
 
-    private static String bufferToHex(byte bytes[]) {
+    private static String bufferToHex(byte[] bytes) {
         return bufferToHex(bytes, 0, bytes.length);
     }
 
-    private static String bufferToHex(byte bytes[], int m, int n) {
+    private static String bufferToHex(byte[] bytes, int m, int n) {
         StringBuilder stringBuilder = new StringBuilder(2 * n);
         int k = m + n;
         for(int i = m; i < k; i++ ) {
@@ -60,8 +61,8 @@ public enum  MD5Utils {
     }
 
     private static void appendHexPair(byte bt, StringBuilder stringBuilder) {
-        char c0 = hexDigits[(bt & 0xf0) >> 4];
-        char c1 = hexDigits[bt & 0xf];
+        char c0 = HEX_DIGITS[(bt & 0xf0) >> 4];
+        char c1 = HEX_DIGITS[bt & 0xf];
         stringBuilder.append(c0);
         stringBuilder.append(c1);
     }
