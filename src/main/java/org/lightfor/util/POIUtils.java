@@ -1,27 +1,27 @@
 package org.lightfor.util;
 
+import com.monitorjbl.xlsx.StreamingReader;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.SpreadsheetVersion;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
 /**
  * POI工具类
- * Created by Light on 2016/6/21.
+ * @author Light
+ * @date 2016/6/21.
  */
 public enum  POIUtils {
     INSTANCE;
@@ -30,11 +30,11 @@ public enum  POIUtils {
         SXSSFWorkbook  wb = new SXSSFWorkbook(100);
         Sheet sheet = wb.createSheet(sheetName);
         CellStyle style = wb.createCellStyle();
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        //style.setAlignment(SXSSFWorkbook.ALIGN_CENTER);
         Font font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        //font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         font.setColor(HSSFColor.BLACK.index);
         style.setFont(font);
         Row titleRow = sheet.createRow(0);
@@ -73,5 +73,37 @@ public enum  POIUtils {
                 }
             }
         }
+    }
+
+    public static void read(String fileName){
+        try {
+            DateUtils.start();
+            LogUtils.info(DateUtils.count());
+            FileInputStream excelFile = new FileInputStream(new File(fileName));
+            LogUtils.info(DateUtils.count());
+            Workbook workbook = StreamingReader.builder()
+                    .rowCacheSize(100)
+                    .bufferSize(4096)
+                    .open(excelFile);
+            LogUtils.info(DateUtils.count());
+            Sheet sheet = workbook.getSheetAt(0);
+            LogUtils.info(DateUtils.count());
+            for (Row currentRow : sheet) {
+                for (Cell currentCell : currentRow) {
+                    if(currentCell.getCellType() == Cell.CELL_TYPE_STRING){
+                        System.out.print(currentCell.getStringCellValue());
+                    } else if(currentCell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+                        System.out.print(currentCell.getNumericCellValue());
+                    } else if(currentCell.getCellType() == Cell.CELL_TYPE_FORMULA){
+                        //System.out.print(currentCell.getCellFormula());
+                    }
+
+                }
+                System.out.println();
+            }
+        } catch (Exception e) {
+            LogUtils.error("读取文件出错", e);
+        }
+
     }
 }
