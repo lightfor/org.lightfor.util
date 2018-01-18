@@ -7,19 +7,21 @@ import java.util.regex.Pattern;
 
 /**
  * 正则表达式工具类
- * Created by Light on 2016/8/9.
+ * @author Light
+ * @date 2016/8/9.
  */
 public enum RegexUtils {
 
+    /**
+     * 实例
+     */
     INSTANCE;
 
-    /**
-     * @param input 输入串
-     * @param regex 正则表达式
-     * @return 返回第一个符合结果
-     */
     public static String returnFirstMatch(String input, String regex){
-        Pattern pattern =  Pattern.compile(regex);
+        return returnFirstMatch(input, Pattern.compile(regex));
+    }
+
+    public static String returnFirstMatch(String input, Pattern pattern) {
         Matcher matcher = pattern.matcher(input);
         if (matcher.find()) {
             return matcher.group(1);
@@ -29,7 +31,10 @@ public enum RegexUtils {
     }
 
     public static Integer countMatch(String input, String regex){
-        Pattern pattern =  Pattern.compile(regex);
+        return countMatch(input, Pattern.compile(regex));
+    }
+
+    public static Integer countMatch(String input, Pattern pattern) {
         Matcher matcher = pattern.matcher(input);
         Integer count = 0;
         while(matcher.find()){
@@ -39,7 +44,10 @@ public enum RegexUtils {
     }
 
     public static List<String> returnAllMatch(String input, String regex){
-        Pattern pattern =  Pattern.compile(regex);
+        return returnAllMatch(input, Pattern.compile(regex));
+    }
+
+    public static List<String> returnAllMatch(String input, Pattern pattern){
         Matcher matcher = pattern.matcher(input);
         List<String> result = new ArrayList<>();
         while(matcher.find()){
