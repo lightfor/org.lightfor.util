@@ -17,6 +17,12 @@ public enum RegexUtils {
      */
     INSTANCE;
 
+    public static final String IP = "^([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])$";
+
+    public static boolean isIp(String str) {
+        return str.matches(IP);
+    }
+
     public static String returnFirstMatch(String input, String regex){
         return returnFirstMatch(input, Pattern.compile(regex));
     }
