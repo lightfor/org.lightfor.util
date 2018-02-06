@@ -1,10 +1,6 @@
 package org.lightfor.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -133,7 +129,10 @@ public enum  FileUtils {
                         break;
                     }
                 } else if(file.isDirectory()){
-                    deleteDirectory(file.getAbsolutePath());
+                    flag = deleteDirectory(file.getAbsolutePath());
+                    if(!flag){
+                        break;
+                    }
                 }
             }
         }
@@ -159,6 +158,36 @@ public enum  FileUtils {
             }
         }
         return result;
+    }
+
+    public static void copy(String src, String dst) {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            fis = new FileInputStream(src);
+            fos = new FileOutputStream(dst);
+            int flag;
+            while ( (flag = fis.read()) != -1) {
+                fos.write(flag);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }
