@@ -1,15 +1,6 @@
 package org.lightfor.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +8,11 @@ import java.util.Map;
 
 /**
  * 数据库工具类
- * Created by Light on 2016/8/13.
+ * @author Light
+ * @date 2016/8/13.
  */
 public enum DBUtils {
+    /** 实例 */
     INSTANCE;
 
     private static Connection conn=null;
@@ -362,6 +355,20 @@ public enum DBUtils {
             conn.rollback();
         } catch (Exception e) {
             LogUtils.error("回滚事务异常",e);
+        }
+    }
+
+    public static void callProcedure(String procedureName) {
+        callProcedure(procedureName, "");
+    }
+
+    public static void callProcedure(String procedureName, String param) {
+        try {
+            CallableStatement callableStatement = conn.prepareCall("{call " + procedureName + "("+param+")}");
+            callableStatement.execute();
+            callableStatement.close();
+        } catch (Exception e) {
+            LogUtils.error("调用存储过程异常",e);
         }
     }
 }
